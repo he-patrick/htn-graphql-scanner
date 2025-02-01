@@ -1,0 +1,27 @@
+services:
+  app:
+    container_name: app
+    build:
+      context: .
+    volumes:
+      - .:/src/app
+      - /src/app/node_modules
+    environment:
+      NODE_ENV: development
+      DEBUG: nodejs-docker-express:*
+      DATABASE_URL: postgres://postgres:password@postgres_db:5432/htn_backend_challenge
+    ports:
+      - 3000:3000
+    command: ["npm", "start"]
+    depends_on:
+      - postgres_db
+
+  postgres_db:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: htn_backend_challenge
+    ports:
+      - "5432:5432"
