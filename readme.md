@@ -1,7 +1,3 @@
-# Hack the North 2021 Backend Boilerplate
+# Hack the North 2025 Backend Challege
 
-This boilerplate contains boilerplate for a GraphQL Express app on Node. The current directory is mounted as a volume under `/src/app` so
-that you do not have to rebuild the image every time (along with `node_modules`). Building and running the image will start the Express server on port
-5000 (GraphiQL used for a GraphQL playground).
-
-Good luck!
+Stack: express, graphql, postgresql
