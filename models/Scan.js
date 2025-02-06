@@ -13,4 +13,4 @@ const Scan = sequelize.define("Scan", {
 User.hasMany(Scan, { foreignKey: "userId", onDelete: "CASCADE" });
 Scan.belongsTo(User, { foreignKey: "userId" });
 
-export { Scan, User };
+export default Scan;
