@@ -6,7 +6,7 @@ import Scan from "../models/Scan.js";
 export const queries = {
   users: {
     type: new GraphQLList(UserType),
-    resolve: () => User.findAll(),
+    resolve: () => User.findAll({ include: [Scan] }),
   },
   user: {
     type: UserType,
