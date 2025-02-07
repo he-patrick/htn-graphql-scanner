@@ -6,6 +6,8 @@ const sequelize = new Sequelize(databaseUrl, {
   dialect: "postgres",
   logging: false,
   timestamps: false,
+  createdAt: false,
+  updatedAt: false,
 });
 
 export default sequelize;
