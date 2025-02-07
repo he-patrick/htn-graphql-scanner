@@ -10,8 +10,8 @@ export const queries = {
   },
   user: {
     type: UserType,
-    args: { id: { type: GraphQLID } },
-    resolve: (_, { id }) => User.findByPk(id),
+    args: { userId: { type: GraphQLID } },
+    resolve: (_, { userId }) => User.findByPk(userId, { include: [Scan] }),
   },
   scans: {
     type: new GraphQLList(ScanType),
@@ -40,9 +40,14 @@ export const mutations = {
     args: {
       userId: { type: new GraphQLNonNull(GraphQLID) },
       activity_name: { type: new GraphQLNonNull(GraphQLString) },
-      scanned_at: { type: GraphQLString },
       activity_category: { type: new GraphQLNonNull(GraphQLString) },
     },
-    resolve: async (_, args) => Scan.create(args),
+    resolve: async (_, args) => {
+      const user = await User.findByPk(args.userId);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      return Scan.create(args);
+    },
   },
 };

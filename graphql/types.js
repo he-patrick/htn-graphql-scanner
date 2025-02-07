@@ -5,7 +5,7 @@ import Scan from "../models/Scan.js";
 const UserType = new GraphQLObjectType({
   name: "User",
   fields: () => ({
-    id: { type: GraphQLID },
+    userId: { type: GraphQLID },
     name: { type: GraphQLString },
     email: { type: GraphQLString },
     phone: { type: GraphQLString },
@@ -13,7 +13,7 @@ const UserType = new GraphQLObjectType({
     updated_at: { type: GraphQLString },
     scans: {
       type: new GraphQLList(ScanType),
-      resolve: (user) => Scan.findAll({ where: { userId: user.id } }),
+      resolve: (user) => Scan.findAll({ where: { userId: user.userId } }),
     },
   }),
 });
@@ -21,10 +21,11 @@ const UserType = new GraphQLObjectType({
 const ScanType = new GraphQLObjectType({
   name: "Scan",
   fields: () => ({
-    id: { type: GraphQLID },
+    scanId: { type: GraphQLID },
     activity_name: { type: GraphQLString },
     scanned_at: { type: GraphQLString },
     activity_category: { type: GraphQLString },
+    userId: { type: GraphQLID },
     user: {
       type: UserType,
       resolve: (scan) => User.findByPk(scan.userId),
@@ -32,4 +33,4 @@ const ScanType = new GraphQLObjectType({
   }),
 });
 
-export { UserType, ScanType }
+export { UserType, ScanType };

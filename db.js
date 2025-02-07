@@ -5,6 +5,7 @@ const databaseUrl = process.env.DATABASE_URL || "postgres://postgres:password@lo
 const sequelize = new Sequelize(databaseUrl, {
   dialect: "postgres",
   logging: false,
+  timestamps: false,
 });
 
 export default sequelize;
