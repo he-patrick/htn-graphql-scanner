@@ -8,6 +8,7 @@ const UserType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     email: { type: GraphQLString },
+    phone: { type: GraphQLString },
     badge_code: { type: GraphQLString },
     updated_at: { type: GraphQLString },
     scans: {
@@ -22,8 +23,8 @@ const ScanType = new GraphQLObjectType({
   fields: () => ({
     id: { type: GraphQLID },
     activity_name: { type: GraphQLString },
-    activity_category: { type: GraphQLString },
     scanned_at: { type: GraphQLString },
+    activity_category: { type: GraphQLString },
     user: {
       type: UserType,
       resolve: (scan) => User.findByPk(scan.userId),

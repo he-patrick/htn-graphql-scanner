@@ -30,6 +30,7 @@ export const mutations = {
     args: {
       name: { type: new GraphQLNonNull(GraphQLString) },
       email: { type: new GraphQLNonNull(GraphQLString) },
+      phone: { type: new GraphQLNonNull(GraphQLString) },
       badge_code: { type: new GraphQLNonNull(GraphQLString) },
     },
     resolve: async (_, args) => User.create(args),
@@ -39,8 +40,8 @@ export const mutations = {
     args: {
       userId: { type: new GraphQLNonNull(GraphQLID) },
       activity_name: { type: new GraphQLNonNull(GraphQLString) },
-      activity_category: { type: new GraphQLNonNull(GraphQLString) },
       scanned_at: { type: GraphQLString },
+      activity_category: { type: new GraphQLNonNull(GraphQLString) },
     },
     resolve: async (_, args) => Scan.create(args),
   },
