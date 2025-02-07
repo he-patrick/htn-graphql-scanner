@@ -9,7 +9,7 @@ query {
     badge_code
     updated_at
     scans {
-			scanId
+	  scanId
       activity_name
       activity_category
       scanned_at
