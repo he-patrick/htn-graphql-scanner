@@ -8,6 +8,6 @@ const User = sequelize.define("User", {
   phone: { type: DataTypes.STRING, allowNull: true },
   badge_code: { type: DataTypes.STRING, allowNull: false, unique: true },
   updated_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-});
+}, { timestamps: false });
 
 export default User;

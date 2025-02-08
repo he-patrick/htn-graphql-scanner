@@ -8,7 +8,7 @@ const Scan = sequelize.define("Scan", {
   activity_category: { type: DataTypes.STRING, allowNull: false },
   scanned_at: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
   userId: { type: DataTypes.UUID, allowNull: false },
-});
+}, { timestamps: false });
 
 // Associate Scans with Users
 User.hasMany(Scan, { foreignKey: "userId", onDelete: "CASCADE" });
