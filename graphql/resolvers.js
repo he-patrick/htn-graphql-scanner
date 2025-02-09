@@ -50,4 +50,20 @@ export const mutations = {
       return Scan.create(args);
     },
   },
+  updateUser: {
+    type: UserType,
+    args: {
+      userId: { type: new GraphQLNonNull(GraphQLID) },
+      name: { type: GraphQLString },
+      phone: { type: GraphQLString },
+      badge_code: { type: GraphQLString }
+    },
+    resolve: async (_, { userId, ...updates }) => {
+      const user = await User.findByPk(userId);
+      if (!user) throw new Error("User not found");
+
+      await user.update(updates);
+      return user;
+    }
+  },
 };
