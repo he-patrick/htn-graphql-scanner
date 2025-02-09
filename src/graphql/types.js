@@ -10,8 +10,14 @@ const UserType = new GraphQLObjectType({
     email: { type: GraphQLString },
     phone: { type: GraphQLString },
     badge_code: { type: GraphQLString },
-    createdAt: { type: GraphQLString },
-    updatedAt: { type: GraphQLString },
+    createdAt: { 
+      type: GraphQLString,
+      resolve: (user) => user.createdAt.toISOString(),
+    },
+    updatedAt: { 
+      type: GraphQLString,
+      resolve: (user) => user.updatedAt.toISOString(),
+    },
     scans: {
       type: new GraphQLList(ScanType),
       resolve: (user) => Scan.findAll({ where: { userId: user.userId } }),
@@ -24,7 +30,10 @@ const ScanType = new GraphQLObjectType({
   fields: () => ({
     scanId: { type: GraphQLID },
     activity_name: { type: GraphQLString },
-    scanned_at: { type: GraphQLString },
+    scanned_at: { 
+      type: GraphQLString,
+      resolve: (scan) => scan.scanned_at.toISOString(),
+    },
     activity_category: { type: GraphQLString },
     user: {
       type: UserType,
