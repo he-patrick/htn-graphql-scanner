@@ -1,106 +1,115 @@
-Query all users in GraphiQL:
-```
+# GraphQL Queries and Mutations
+
+## Queries
+
+### Get All Users
+```graphql
 query {
-  users {
-    userId
-    name
-    email
-    phone
-    badge_code
-    updated_at
-    scans {
-	  scanId
-      activity_name
-      activity_category
-      scanned_at
-      userId
+    users {
+        userId
+        name
+        email
+        phone
+        badge_code
+        createdAt
+        updatedAt
+        scans {
+            scanId
+            activity_name
+            scanned_at
+            activity_category
+        }
     }
-  }
 }
 ```
 
-Query a specific user in GraphiQL:
-```
+### Get User by ID
+```graphql
 query {
-  user(userId: "USER_ID_HERE") {
-    userId
-    name
-    email
-    phone
-    badge_code
-    updated_at
-    scans {
-      scanId
-      activity_name
-      scanned_at
-      activity_category
+    user(userId: "USER_ID_HERE") {
+        userId
+        name
+        email
+        phone
+        badge_code
+        createdAt
+        updatedAt
+        scans {
+            scanId
+            activity_name
+            scanned_at
+            activity_category
+        }
     }
-  }
 }
 ```
 
-Query all scans in GraphiQL:
-```
+### Get All Scans with Filters
+```graphql
 query {
-  scans {
-    scanId
-    activity_name
-    scanned_at
-    activity_category
-    user {
-      userId
-      name
+    scans(min_frequency: 1, max_frequency: 10, activity_category: "CATEGORY_HERE") {
+        activity_name
+        frequency
     }
-  }
 }
 ```
 
-Query a specific user's scans in GraphiQL:
-```
+### Get Scans by User ID
+```graphql
 query {
-  userScans(userId: "USER_ID_HERE") {
-    scanId
-    activity_name
-    scanned_at
-    activity_category
-  }
+    userScans(userId: "USER_ID_HERE") {
+        scanId
+        activity_name
+        scanned_at
+        activity_category
+    }
 }
 ```
 
-Mutation for a new user in GraphiQL:
-```
+## Mutations
+
+### Add User
+```graphql
 mutation {
-  addUser(
-    name: "John Doe"
-    email: "john.doe@example.com"
-    phone: "123-456-7890"
-    badge_code: "ABC123"
-  ) {
-    userId
-    name
-    email
-    phone
-    badge_code
-  }
+    addUser(name: "NAME_HERE", email: "EMAIL_HERE", phone: "PHONE_HERE", badge_code: "BADGE_CODE_HERE") {
+        userId
+        name
+        email
+        phone
+        badge_code
+        createdAt
+        updatedAt
+    }
 }
 ```
 
-Mutation for a new scan in GraphiQL:
-```
+### Add Scan
+```graphql
 mutation {
-  addScan(
-    userId: "USER_ID_HERE"
-    activity_name: "Yoga Class"
-    activity_category: "Fitness"
-  ) {
-    scanId
-    activity_name
-    scanned_at
-    activity_category
-    user {
-      userId
-      name
+    addScan(userId: "USER_ID_HERE", activity_name: "ACTIVITY_NAME_HERE", activity_category: "CATEGORY_HERE") {
+        scanId
+        activity_name
+        scanned_at
+        activity_category
+        user {
+            userId
+            name
+        }
     }
-  }
+}
+```
+
+### Update User
+```graphql
+mutation {
+    updateUser(userId: "USER_ID_HERE", name: "NEW_NAME_HERE", phone: "NEW_PHONE_HERE", badge_code: "NEW_BADGE_CODE_HERE") {
+        userId
+        name
+        email
+        phone
+        badge_code
+        createdAt
+        updatedAt
+    }
 }
 ```
