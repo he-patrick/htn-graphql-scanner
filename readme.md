@@ -133,4 +133,4 @@ htn_backend_challenge/
 - When the badge_code was empty in the JSON file, I created to create a temporary badge_code labeled `temp-RANDOM`.
 - I can see in the example_data.json that users can scan into the same activity_name multiple times, so I don't have anything blocking multiple of the same scans for the same user.
 
-***Now, check out `link` for a list of demo queries and mutations and their responses***
+***Now, check out [/src/graphql/readme.md](https://github.com/he-patrick/htn-backend-challenge/tree/b0d8e749fd9c6e22def0eed62f35a49aab1cfb64/src/graphql) for a list of demo queries and mutations and their responses***
