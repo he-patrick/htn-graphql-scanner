@@ -79,8 +79,11 @@ export const mutations = {
     },
     resolve: async (_, { userId, ...updates }) => {
       const user = await User.findByPk(userId);
-      if (!user) throw new Error("User not found");
-
+      if (!user) {
+        throw new Error("User not found");
+      }
+      user.updatedAt = Date.now();
+      await user.save();
       await user.update(updates);
       return user;
     }
