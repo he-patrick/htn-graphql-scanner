@@ -19,7 +19,7 @@ async function loadData() {
 
     for (const scan of userData.scans) {
       await Scan.create({
-        user_id: user.id,
+        user_id: user.userId,
         activity_name: scan.activity_name,
         activity_category: scan.activity_category,
         scanned_at: scan.scanned_at

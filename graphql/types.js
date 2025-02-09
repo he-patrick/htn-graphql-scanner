@@ -26,7 +26,6 @@ const ScanType = new GraphQLObjectType({
     activity_name: { type: GraphQLString },
     scanned_at: { type: GraphQLString },
     activity_category: { type: GraphQLString },
-    userId: { type: GraphQLID },
     user: {
       type: UserType,
       resolve: (scan) => User.findByPk(scan.userId),
