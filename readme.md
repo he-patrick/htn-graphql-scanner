@@ -79,8 +79,6 @@ htn_backend_challenge/
 `addScan`: Add a scan for a user. (This will update the User.updatedAt field) </br>
 `updateUser`: Update a user's name, phone, badgecode. (This will update the User.updatedAt field) </br>
 
-**See demo queries in:** `/src/graphql/readme.md`
-
 ## Database Structure
 **Access PostgreSQL Container:** `docker exec -it postgres_db psql -U postgres -d htn_backend_challenge`
 
