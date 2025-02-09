@@ -34,11 +34,6 @@ export const queries = {
       return results;
     },
   },
-  userScans: {
-    type: new GraphQLList(ScanType),
-    args: { userId: { type: new GraphQLNonNull(GraphQLID) } },
-    resolve: (_, { userId }) => Scan.findAll({ where: { userId } }),
-  },
 };
 
 export const mutations = {
