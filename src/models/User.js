@@ -7,8 +7,8 @@ const User = sequelize.define("User", {
   email: { type: DataTypes.STRING, allowNull: false, unique: true },
   phone: { type: DataTypes.STRING, allowNull: false },
   badge_code: { type: DataTypes.STRING, allowNull: false, unique: true },
-  createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
-  updatedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+  createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, allowNull: false },
+  updatedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW, allowNull: false },
 }, {
   tableName: "Users",
   timestamps: false,
