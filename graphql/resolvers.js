@@ -47,6 +47,8 @@ export const mutations = {
       if (!user) {
         throw new Error("User not found");
       }
+      user.updatedAt = Date.now();
+      await user.save();
       return Scan.create(args);
     },
   },
