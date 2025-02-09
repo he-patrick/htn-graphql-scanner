@@ -10,7 +10,8 @@ const UserType = new GraphQLObjectType({
     email: { type: GraphQLString },
     phone: { type: GraphQLString },
     badge_code: { type: GraphQLString },
-    updated_at: { type: GraphQLString },
+    createdAt: { type: GraphQLString },
+    updatedAt: { type: GraphQLString },
     scans: {
       type: new GraphQLList(ScanType),
       resolve: (user) => Scan.findAll({ where: { userId: user.userId } }),
