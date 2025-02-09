@@ -1,7 +1,8 @@
-import { GraphQLList, GraphQLID, GraphQLNonNull, GraphQLString } from "graphql";
+import { GraphQLObjectType, GraphQLInt, GraphQLList, GraphQLID, GraphQLNonNull, GraphQLString } from "graphql";
 import { UserType, ScanType } from "./types.js";
 import User from "../models/User.js";
 import Scan from "../models/Scan.js";
+import { getScanData } from "../services/scanService.js";
 
 export const queries = {
   users: {
@@ -14,8 +15,24 @@ export const queries = {
     resolve: (_, { userId }) => User.findByPk(userId, { include: [Scan] }),
   },
   scans: {
-    type: new GraphQLList(ScanType),
-    resolve: () => Scan.findAll(),
+    type: new GraphQLList(
+      new GraphQLObjectType({
+        name: "ScanAggregate",
+        fields: {
+          activity_name: { type: GraphQLString },
+          frequency: { type: GraphQLInt },
+        },
+      })
+    ),
+    args: {
+      min_frequency: { type: GraphQLInt },
+      max_frequency: { type: GraphQLInt },
+      activity_category: { type: GraphQLString },
+    },
+    resolve: async (_, args) => {
+      const results = await getScanData(args);
+      return results;
+    },
   },
   userScans: {
     type: new GraphQLList(ScanType),
