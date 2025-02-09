@@ -127,10 +127,207 @@ htn_backend_challenge/
 - Even though it was specified that the badge codes are unique, I decided to use a `userId` column to give user a unique uuid — if the requirements were to change in the future, this would ensure that every user has a unique identifier.
 - Similarily, I created a `scanId`, even though it's not needed at the moment. Future requirements might find it useful to have a unique identifier for each scan.
 - I used a raw SQL query in `services/scanService.js` for the `scans` requirements to show my ability to construct SQL queries (I was working on this stuff at my CRA internship).
-
+- I initially had a query to get scans by userId but removed it because of redundancy -> graphql allows you to retrieve speicifc data that you want so it has the same functionality as using the user query and asking for the user's scan data.
 
 ## Assumptions:    
 - When the badge_code was empty in the JSON file, I created to create a temporary badge_code labeled `temp-RANDOM`.
 - I can see in the example_data.json that users can scan into the same activity_name multiple times, so I don't have anything blocking multiple of the same scans for the same user.
 
-***Now, check out [/src/graphql/readme.md](https://github.com/he-patrick/htn-backend-challenge/tree/b0d8e749fd9c6e22def0eed62f35a49aab1cfb64/src/graphql) for a list of demo queries and mutations and their responses***
+## Queries
+
+### Get All Users
+Query:
+```graphql
+query {
+    users {
+        userId
+        name
+        email
+        phone
+        badge_code
+        createdAt
+        updatedAt
+        scans {
+            scanId
+            activity_name
+            scanned_at
+            activity_category
+        }
+    }
+}
+```
+Example response:
+```
+{
+    "userId": "ddf9f6a7-1fd1-4227-8bd0-ce37d5110367",
+    "name": "Amanda Hicks",
+    "email": "milescynthia@example.net",
+    "phone": "575-273-5668",
+    "badge_code": "move-public-leader-understand",
+    "createdAt": "2025-02-09T02:59:23.208Z",
+    "updatedAt": "2025-02-09T02:59:23.208Z",
+    "scans": [
+        {
+            "scanId": "a59903e8-bfa3-49e1-8767-b9c22243b273",
+            "activity_name": "sunday_breakfast",
+            "scanned_at": "2025-01-18T06:30:22.404Z",
+            "activity_category": "meal"
+        },
+    ]
+}
+```
+
+### Get User by ID
+Query:
+```graphql
+query {
+    user(userId: "USER_ID_HERE") {
+        userId
+        name
+        email
+        phone
+        badge_code
+        createdAt
+        updatedAt
+        scans {
+            scanId
+            activity_name
+            scanned_at
+            activity_category
+        }
+    }
+}
+```
+Example response:
+```
+"user": {
+    "userId": "a41563d6-9dde-4c6a-9df8-054a065cb115",
+    "name": "Angela Dennis",
+    "email": "alexanderchristopher@example.com",
+    "phone": "001-274-492-0303x52496",
+    "badge_code": "assume-issue-hand-others",
+    "createdAt": "2025-02-09T02:59:23.224Z",
+    "updatedAt": "2025-02-09T02:59:23.224Z",
+    "scans": [
+        {
+            "scanId": "993e7ec4-31a6-42da-89ad-74fc7b5f516d",
+            "activity_name": "sunday_breakfast",
+            "scanned_at": "2025-01-19T14:44:43.848Z",
+            "activity_category": "meal"
+        },
+    ]
+}
+```
+
+### Get All Scans with Filters
+Query:
+```graphql
+query {
+    scans(min_frequency: 1, max_frequency: 10, activity_category: "CATEGORY_HERE") {
+        activity_name
+        frequency
+    }
+}
+```
+Example Response:
+```
+"scans": [
+    {
+        "activity_name": "closing_ceremony",
+        "frequency": 23
+    },
+    {
+        "activity_name": "team_formation",
+        "frequency": 22
+    }
+]
+
+```
+
+## Mutations
+
+### Add User
+Mutation:
+```graphql
+mutation {
+    addUser(name: "NAME_HERE", email: "EMAIL_HERE", phone: "PHONE_HERE", badge_code: "BADGE_CODE_HERE") {
+        userId
+        name
+        email
+        phone
+        badge_code
+        createdAt
+        updatedAt
+    }
+}
+```
+Example response:
+```
+"addUser": {
+    "userId": "7ad062d9-6338-4a39-a2d6-5f190fe4f246",
+    "name": "Patrick He",
+    "email": "patrick@gmail.com",
+    "phone": "613-581-7601",
+    "badge_code": "banana_banana_yum",
+    "createdAt": "2025-02-09T17:17:07.782Z",
+    "updatedAt": "2025-02-09T17:17:07.782Z"
+}
+```
+
+### Add Scan
+Mutation:
+```graphql
+mutation {
+    addScan(userId: "USER_ID_HERE", activity_name: "ACTIVITY_NAME_HERE", activity_category: "CATEGORY_HERE") {
+        scanId
+        activity_name
+        scanned_at
+        activity_category
+        user {
+            userId
+            name
+        }
+    }
+}
+```
+Example response:
+```
+"addScan": {
+    "scanId": "5f0fcf5c-4e8a-4a35-84d1-99396dbdb1d7",
+    "activity_name": "EAAAAAT",
+    "scanned_at": "2025-02-09T17:19:07.056Z",
+    "activity_category": "food",
+    "user": {
+        "userId": "7ad062d9-6338-4a39-a2d6-5f190fe4f246",
+        "name": "Patrick He"
+    }
+}
+```
+
+### Update User
+Mutation:
+```graphql
+mutation {
+    updateUser(userId: "USER_ID_HERE", name: "NEW_NAME_HERE", phone: "NEW_PHONE_HERE", badge_code: "NEW_BADGE_CODE_HERE") {
+        userId
+        name
+        email
+        phone
+        badge_code
+        createdAt
+        updatedAt
+    }
+}
+```
+Example response:
+```
+"updateUser": {
+    "userId": "7ad062d9-6338-4a39-a2d6-5f190fe4f246",
+    "name": "Bob Joe",
+    "email": "patrick@gmail.com",
+    "phone": "613-234-5213",
+    "badge_code": "banana_banana_yum",
+    "createdAt": "2025-02-09T17:17:07.782Z",
+    "updatedAt": "2025-02-09T17:20:49.448Z"
+}
+```
