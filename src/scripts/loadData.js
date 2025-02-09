@@ -1,7 +1,7 @@
 import fs from "fs";
 import User from "../models/User.js";
 import Scan from "../models/Scan.js";
-import sequelize from "../db.js";
+import sequelize from "../../db.js";
 
 async function loadData() {
   await sequelize.sync({ alter: true });

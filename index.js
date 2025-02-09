@@ -1,7 +1,7 @@
 import express from "express";
 import { graphqlHTTP } from "express-graphql";
 import sequelize from "./db.js";
-import schema from "./graphql/schema.js";
+import schema from "./src/graphql/schema.js";
 
 const port = process.env.PORT || 3000;
 const app = express();
