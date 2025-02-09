@@ -41,7 +41,8 @@ htn_backend_challenge/
 │   │   └── types.js
 │   ├── models/
 │   │   ├── Scan.js
-│   │   └── User.js
+│   │   ├── User.js
+│   │   └── Mealtime.js
 │   ├── scripts/
 │   │   ├── example_data.json
 │   │   └── loadData.js
@@ -58,6 +59,7 @@ htn_backend_challenge/
 - **src/models/**:
   - **Scan.js**: Defines the data model for the "Scan" entity.
   - **User.js**: Defines the data model for the "User" entity.
+  - **Mealtime.js**: Defines the data model for the "Mealtime" entity.
 
 - **src/scripts/**:
   - **loadData.js**: The script used to load the JSON file data.
@@ -75,9 +77,11 @@ htn_backend_challenge/
 `users`: Retrieve all users along with their associated scans. </br>
 `user`: Search for a specific user along with their associated scans. </br>
 `scans`: Retrieve the number of scans for each activity with optional filters for specific criteria such as min_frequency, max_frequency, or activity_category. </br>
+`nextMeal`: Finds the next (or current) meal startTime and endTime. </br>
 `addUser`: Create a new user. </br>
 `addScan`: Add a scan for a user. (This will update the User.updatedAt field) </br>
 `updateUser`: Update a user's name, phone, badgecode. (This will update the User.updatedAt field) </br>
+`setMealtime`: Sets a meal and its startTime and endTime. Allows for updating a current meal's times. </br>
 
 ## Database Structure
 **Access PostgreSQL Container:** `docker exec -it postgres_db psql -U postgres -d htn_backend_challenge`
@@ -109,7 +113,7 @@ htn_backend_challenge/
 ```
                 Table "public.Scans"
       Column       |           Type           | Nullable  | Description
--------------------+--------------------------+-----------+-------------
+-------------------+--------------------------+-----------+--------------------------------
  scanId            | uuid                     | not null  | Unique identifier for the scan
  activity_name     | character varying(255)   | not null  | Name of the activity
  activity_category | character varying(255)   | not null  | Category of the activity
@@ -117,6 +121,18 @@ htn_backend_challenge/
  createdAt         | timestamp with time zone | not null  | Timestamp when the scan was created
  updatedAt         | timestamp with time zone | not null  | Timestamp when the scan was last updated
  userId            | uuid                     | not null  | Identifier of the user who performed the scan
+```
+
+**Display Mealtimes Table:** `\d "Mealtimes"`
+```
+  Column   |           Type           | Nullable | Description                 
+-----------+--------------------------+----------+-----------------------------------------
+ id        | integer                  | not null | Unique identifier for the meal
+ mealType  | character varying(255)   | not null | Name of the meal (e.g. Breakfast, Lunch, Dinner, etc.)
+ startTime | timestamp with time zone | not null | Start time of the meal
+ endTime   | timestamp with time zone | not null | End time of the meal
+ createdAt | timestamp with time zone | not null | Timestamp when the meal was created
+ updatedAt | timestamp with time zone | not null | Timestamp when the meal was last updated
 ```
 
 ## Design Choices
@@ -130,6 +146,11 @@ htn_backend_challenge/
 ## Assumptions:    
 - When the badge_code was empty in the JSON file, I created to create a temporary badge_code labeled `temp-RANDOM`.
 - I can see in the example_data.json that users can scan into the same activity_name multiple times, so I don't have anything blocking multiple of the same scans for the same user.
+
+## Bonus:
+Sometimes, as a hacker, you're so absolutely locked in that you can't seem to remember when dinner is coming up! Well you're in luck now — I created a mutation that allows the Hack the North team to set meal times, and a query that allows hackers to see when the next meal time is coming up, with its start and end times.
+
+Check out the `nextMeal` and `setMealtime` responses below!
 
 ## Queries
 
@@ -242,6 +263,26 @@ Example Response:
 
 ```
 
+### Get Next Mealtime
+Query:
+```graphql
+query {
+  nextMeal {
+    mealType
+    startTime
+    endTime
+  }
+}
+```
+Example response:
+```json
+"nextMeal": {
+    "mealType": "Dinner",
+    "startTime": "2025-02-09T23:00:00.000Z",
+    "endTime": "2025-02-10T00:00:00.000Z"
+}
+```
+
 ## Mutations
 
 ### Add User
@@ -327,5 +368,25 @@ Example response:
     "badge_code": "banana_banana_yum",
     "createdAt": "2025-02-09T17:17:07.782Z",
     "updatedAt": "2025-02-09T17:20:49.448Z"
+}
+```
+
+### Set Mealtime
+Mutation:
+```graphql
+mutation {
+  setMealtime(mealType: "Breakfast", startTime: "2025-02-10 08:00:00", endTime: "2025-02-10 09:00:00") {
+    mealType
+    startTime
+    endTime
+  }
+}
+```
+Example response:
+```json
+"setMealtime": {
+    "mealType": "Breakfast",
+    "startTime": "2025-02-10T13:00:00.000Z",
+    "endTime": "2025-02-10T14:00:00.000Z"
 }
 ```
