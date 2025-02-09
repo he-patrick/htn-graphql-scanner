@@ -42,4 +42,19 @@ const ScanType = new GraphQLObjectType({
   }),
 });
 
-export { UserType, ScanType };
+const MealtimeType = new GraphQLObjectType({
+  name: "Mealtime",
+  fields: () => ({
+    mealType: { type: GraphQLString },
+    startTime: { 
+      type: GraphQLString,
+      resolve: (mealtime) => mealtime.startTime.toISOString(),
+    },
+    endTime: { 
+      type: GraphQLString,
+      resolve: (mealtime) => mealtime.endTime.toISOString(),
+    }
+  })
+});
+
+export { UserType, ScanType, MealtimeType };

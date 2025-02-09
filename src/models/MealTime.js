@@ -1,12 +1,12 @@
 import { DataTypes } from "sequelize";
 import sequelize from "../../db.js";
 
-const MealTime = sequelize.define("MealTime", {
+const Mealtime = sequelize.define("Mealtimes", {
   mealType: { type: DataTypes.STRING, allowNull: false, unique: true },
-  startTime: { type: DataTypes.TIME, allowNull: false },
-  endTime: { type: DataTypes.TIME, allowNull: false }
+  startTime: { type: DataTypes.DATE, allowNull: false },
+  endTime: { type: DataTypes.DATE, allowNull: false }
 }, {
-    tableName: "MealTimes",
+    tableName: "Mealtimes",
 });
 
-export default MealTime;
+export default Mealtime;

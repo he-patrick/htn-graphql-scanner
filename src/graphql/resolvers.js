@@ -1,8 +1,11 @@
 import { GraphQLObjectType, GraphQLInt, GraphQLList, GraphQLID, GraphQLNonNull, GraphQLString } from "graphql";
-import { UserType, ScanType } from "./types.js";
+import { UserType, ScanType, MealtimeType } from "./types.js";
 import User from "../models/User.js";
 import Scan from "../models/Scan.js";
+import Mealtime from "../models/Mealtime.js";
 import { getScanData } from "../services/scanService.js";
+import { Op } from "sequelize";
+import moment from "moment-timezone";
 
 export const queries = {
   users: {
@@ -34,6 +37,31 @@ export const queries = {
       return results;
     },
   },
+  nextMeal: {
+    type: MealtimeType,
+    resolve: async () => {
+      const now = new Date();
+      let meal = await Mealtime.findOne({
+        where: {
+          startTime: { [Op.lte]: now },
+          endTime: { [Op.gte]: now }
+        },
+        order: [["startTime", "ASC"]]
+      });
+      if (!meal) {
+        meal = await Mealtime.findOne({
+          where: {
+            startTime: { [Op.gte]: now }
+          },
+          order: [["startTime", "ASC"]]
+        });
+      }
+      if (!meal) {
+        meal = await Mealtime.findOne({ order: [["startTime", "ASC"]] });
+      }
+      return meal;
+    }
+  }
 };
 
 export const mutations = {
@@ -83,4 +111,23 @@ export const mutations = {
       return user;
     }
   },
+  setMealtime: {
+    type: MealtimeType,
+    args: {
+      mealType: { type: new GraphQLNonNull(GraphQLString) },
+      startTime: { type: new GraphQLNonNull(GraphQLString) },
+      endTime: { type: new GraphQLNonNull(GraphQLString) }
+    },
+    resolve: async (_, { mealType, startTime, endTime }) => {
+      try {
+        const startTimeUTC = moment.tz(startTime, "YYYY-MM-DD HH:mm:ss", "America/New_York").utc().format();
+        const endTimeUTC = moment.tz(endTime, "YYYY-MM-DD HH:mm:ss", "America/New_York").utc().format();
+        const [meal, created] = await Mealtime.upsert({ mealType, startTime: startTimeUTC, endTime: endTimeUTC });
+        return meal;
+      } catch (error) {
+        console.error("Error setting meal time:", error);
+        throw new Error("Database update failed");
+      }
+    }    
+  }
 };
