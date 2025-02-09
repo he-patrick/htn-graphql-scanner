@@ -155,7 +155,7 @@ query {
 }
 ```
 Example response:
-```
+```json
 {
     "userId": "ddf9f6a7-1fd1-4227-8bd0-ce37d5110367",
     "name": "Amanda Hicks",
@@ -197,7 +197,7 @@ query {
 }
 ```
 Example response:
-```
+```json
 "user": {
     "userId": "a41563d6-9dde-4c6a-9df8-054a065cb115",
     "name": "Angela Dennis",
@@ -228,7 +228,7 @@ query {
 }
 ```
 Example Response:
-```
+```json
 "scans": [
     {
         "activity_name": "closing_ceremony",
@@ -260,7 +260,7 @@ mutation {
 }
 ```
 Example response:
-```
+```json
 "addUser": {
     "userId": "7ad062d9-6338-4a39-a2d6-5f190fe4f246",
     "name": "Patrick He",
@@ -289,7 +289,7 @@ mutation {
 }
 ```
 Example response:
-```
+```json
 "addScan": {
     "scanId": "5f0fcf5c-4e8a-4a35-84d1-99396dbdb1d7",
     "activity_name": "EAAAAAT",
@@ -318,7 +318,7 @@ mutation {
 }
 ```
 Example response:
-```
+```json
 "updateUser": {
     "userId": "7ad062d9-6338-4a39-a2d6-5f190fe4f246",
     "name": "Bob Joe",
