@@ -29,6 +29,33 @@
     docker exec -it postgres_db psql -U postgres -d htn_backend_challenge
     ```
 
+## Managing Hosted Instance
+
+1. **Build Image:**
+    ```
+    docker build -t htn-backend-challenge .
+    ```
+
+2. **Add Tag:**
+    ```
+    docker tag htn-backend-challenge 762233744377.dkr.ecr.us-east-2.amazonaws.com/htn-backend-challenge
+    ```
+
+3. **Push to AWS:**
+    ```
+    docker push 762233744377.dkr.ecr.us-east-2.amazonaws.com/htn-backend-challenge
+    ```
+
+4. **Access AWS RDS Database Through EC2 Instance:**
+    ```
+    psql -h htn-backend-challenge.c72ys44ic8jb.us-east-2.rds.amazonaws.com -U postgres
+    ```
+
+5. **Connect to htn_backend_challenge Database**
+    ```
+    \c htn_backend_challenge
+    ```
+
 ## Project Structure
 
 ```
