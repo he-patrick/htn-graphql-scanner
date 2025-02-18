@@ -1,9 +1,5 @@
-FROM node:14
-RUN mkdir /db
-RUN mkdir -p /src/app
-WORKDIR /src/app
-COPY package*.json /src/app
+FROM public.ecr.aws/lambda/nodejs:18
+COPY package*.json ./
 RUN npm install
-COPY . /src/app
-EXPOSE 3000
-CMD [ "npm", "start" ]
+COPY . .
+CMD ["index.handler"]
