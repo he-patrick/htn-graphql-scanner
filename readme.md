@@ -1,7 +1,7 @@
 # Hack the North 2025 Backend Challenge
 
 ## Hosted Interactive Client
-Try out the queries and mutations hosted on AWS Lambda and RDS through this website: [link](https://v0-graph-ql-api-client-wfbs1y.vercel.app/)
+Try out the queries and mutations hosted on AWS Lambda and RDS through this website: https://htn-backend-challenge.vercel.app
 
 ## Setup Instructions
 
