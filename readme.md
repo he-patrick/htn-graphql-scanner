@@ -1,5 +1,8 @@
 # Hack the North 2025 Backend Challenge
 
+## Hosted Interactive Client
+Try out the queries and mutations hosted on AWS Lambda and RDS through this website: [link](https://v0-graph-ql-api-client-wfbs1y.vercel.app/)
+
 ## Setup Instructions
 
 ### Requirements
@@ -36,25 +39,31 @@
     docker build -t htn-backend-challenge .
     ```
 
-2. **Add Tag:**
+2. **Login to AWS**
     ```
-    docker tag htn-backend-challenge 762233744377.dkr.ecr.us-east-2.amazonaws.com/htn-backend-challenge
-    ```
-
-3. **Push to AWS:**
-    ```
-    docker push 762233744377.dkr.ecr.us-east-2.amazonaws.com/htn-backend-challenge
+    aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin <user-id>.dkr.ecr.us-east-2.amazonaws.com
     ```
 
-4. **Access AWS RDS Database Through EC2 Instance:**
+3. **Add Tag:**
+    ```
+    docker tag htn-backend-challenge <user-id>.dkr.ecr.us-east-2.amazonaws.com/htn-backend-challenge
+    ```
+
+4. **Push to AWS:**
+    ```
+    docker push <user-id>.dkr.ecr.us-east-2.amazonaws.com/htn-backend-challenge
+    ```
+
+5. **Access AWS RDS Database Through EC2 Instance:**
     ```
     psql -h htn-backend-challenge.c72ys44ic8jb.us-east-2.rds.amazonaws.com -U postgres
     ```
 
-5. **Connect to htn_backend_challenge Database**
+6. **Connect to htn_backend_challenge Database**
     ```
     \c htn_backend_challenge
     ```
+
 
 ## Project Structure
 
