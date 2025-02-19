@@ -3,6 +3,9 @@
 ## Hosted Interactive Client
 Try out the queries and mutations hosted on AWS Lambda and RDS through this website: https://htn-backend-challenge.vercel.app
 
+## Postman
+Feel free to test out the API in Postman at this endpoint: https://4vufccuxnj.execute-api.us-east-2.amazonaws.com/default/htn-backend-challenge
+
 ## Setup Instructions
 
 ### Requirements
