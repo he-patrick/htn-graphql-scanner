@@ -5,7 +5,7 @@ import awsServerlessExpress from "aws-serverless-express";
 import schema from "./src/graphql/schema.js";
 import sequelize from "./db.js";
 
-const allowedOrigin = "https://v0-graph-ql-api-client-wfbs1y.vercel.app";
+const allowedOrigin = "*";
 
 const app = express();
 
