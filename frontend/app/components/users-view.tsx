@@ -75,6 +75,7 @@ export default function UsersView() {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead>id</TableHead>
             <TableHead>Name</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Phone</TableHead>
@@ -85,6 +86,7 @@ export default function UsersView() {
         <TableBody>
           {users.map((user: any) => (
             <TableRow key={user.userId}>
+              <TableCell>{user.userId}</TableCell>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.email}</TableCell>
               <TableCell>{user.phone}</TableCell>
