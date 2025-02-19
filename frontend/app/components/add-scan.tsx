@@ -3,11 +3,10 @@
 import type React from "react"
 
 import { useState } from "react"
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { toast } from "sonner"
 
 const ADD_SCAN_MUTATION = `
@@ -21,16 +20,6 @@ const ADD_SCAN_MUTATION = `
   }
 `
 
-const GET_ALL_USERS = `
-  query GetAllUsers {
-    users {
-      userId
-      name
-      email
-    }
-  }
-`
-
 export default function AddScan() {
   const [formData, setFormData] = useState({
     userId: "",
@@ -40,26 +29,12 @@ export default function AddScan() {
 
   const queryClient = useQueryClient()
 
-  const { data: users, isLoading: isLoadingUsers } = useQuery({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const response = await fetch("https://4vufccuxnj.execute-api.us-east-2.amazonaws.com/default/htn-backend-challenge", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: GET_ALL_USERS,
-          variables: {},
-        }),
-      })
-      const data = await response.json()
-      return data.data.users
-    },
-  })
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (scanData: typeof formData) => {
+  const { mutate, isPending } = useMutation<
+    { scanId: string; activity_name: string; scanned_at: string; activity_category: string },
+    Error,
+    { userId: string; activity_name: string; activity_category: string }
+  >({
+    mutationFn: async (scanData) => {
       const response = await fetch("https://4vufccuxnj.execute-api.us-east-2.amazonaws.com/default/htn-backend-challenge", {
         method: "POST",
         headers: {
@@ -86,7 +61,7 @@ export default function AddScan() {
       })
     },
     onError: (error: Error) => {
-      toast.error("Error adding scan:" + error.message)
+      toast.error("Error adding scan: " + error.message)
     },
   })
 
@@ -102,19 +77,13 @@ export default function AddScan() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid gap-2">
-        <Label htmlFor="userId">User</Label>
-        <Select value={formData.userId} onValueChange={(value) => setFormData((prev) => ({ ...prev, userId: value }))}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select a user" />
-          </SelectTrigger>
-          <SelectContent>
-            {users?.map((user: any) => (
-              <SelectItem key={user.userId} value={user.userId}>
-                {user.name} ({user.email})
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Label htmlFor="userId">User ID</Label>
+        <Input
+          id="userId"
+          value={formData.userId}
+          onChange={(e) => setFormData((prev) => ({ ...prev, userId: e.target.value }))}
+          required
+        />
       </div>
       <div className="grid gap-2">
         <Label htmlFor="activity_name">Activity Name</Label>
@@ -127,19 +96,12 @@ export default function AddScan() {
       </div>
       <div className="grid gap-2">
         <Label htmlFor="activity_category">Activity Category</Label>
-        <Select
+        <Input
+          id="activity_category"
           value={formData.activity_category}
-          onValueChange={(value) => setFormData((prev) => ({ ...prev, activity_category: value }))}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select a category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="meal">Meal</SelectItem>
-            <SelectItem value="workshop">Workshop</SelectItem>
-            <SelectItem value="activity">Activity</SelectItem>
-          </SelectContent>
-        </Select>
+          onChange={(e) => setFormData((prev) => ({ ...prev, activity_category: e.target.value }))}
+          required
+        />
       </div>
       <Button type="submit" disabled={isPending}>
         {isPending ? "Adding..." : "Add Scan"}
@@ -147,4 +109,3 @@ export default function AddScan() {
     </form>
   )
 }
-
