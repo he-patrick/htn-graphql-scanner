@@ -53,11 +53,11 @@ const KaraokeType = new GraphQLObjectType({
     userId: { type: GraphQLID },
     createdAt: { 
       type: GraphQLString,
-      resolve: (karaoke) => karaoke.createdAt ? karaoke.createdAt.toISOString() : null,
+      resolve: (karaoke) => karaoke.createdAt.toISOString(),
     },
     updatedAt: { 
       type: GraphQLString,
-      resolve: (karaoke) => karaoke.updatedAt ? karaoke.updatedAt.toISOString() : null,
+      resolve: (karaoke) => karaoke.updatedAt.toISOString(),
     },
     user: {
       type: UserType,
