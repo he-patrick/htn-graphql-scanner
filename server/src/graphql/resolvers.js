@@ -1,7 +1,8 @@
 import { GraphQLObjectType, GraphQLInt, GraphQLList, GraphQLID, GraphQLNonNull, GraphQLString } from "graphql";
-import { UserType, ScanType, MealtimeType } from "./types.js";
+import { UserType, ScanType, KaraokeType, MealtimeType } from "./types.js";
 import User from "../models/User.js";
 import Scan from "../models/Scan.js";
+import Karaoke from "../models/Karaoke.js";
 import Mealtime from "../models/Mealtime.js";
 import { getScanData } from "../services/scanService.js";
 import { Op } from "sequelize";
@@ -61,7 +62,15 @@ export const queries = {
       }
       return meal;
     }
-  }
+  },
+  karaokes: {
+    type: new GraphQLList(KaraokeType),
+    resolve: () => Karaoke.findAll({ order: [['createdAt', 'ASC']] }),
+  },
+  nextKaraoke: {
+    type: KaraokeType,
+    resolve: () => Karaoke.findOne({ order: [['createdAt', 'DESC']] }),
+  },
 };
 
 export const mutations = {
@@ -129,5 +138,21 @@ export const mutations = {
         throw new Error("Database update failed");
       }
     }    
-  }
+  },
+  addKaraoke: {
+    type: KaraokeType,
+    args: {
+      userId: { type: new GraphQLNonNull(GraphQLID) },
+      song_name: { type: new GraphQLNonNull(GraphQLString) },
+      artist: { type: new GraphQLNonNull(GraphQLString) },
+      youtube_link: { type: new GraphQLNonNull(GraphQLString) },
+    },
+    resolve: async (_, args) => {
+      const existing = await Karaoke.findOne({ where: { userId: args.userId } });
+      if (existing) {
+        await existing.destroy();
+      }
+      return Karaoke.create(args);
+    },
+  },
 };
