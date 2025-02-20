@@ -148,10 +148,6 @@ export const mutations = {
       youtube_link: { type: new GraphQLNonNull(GraphQLString) },
     },
     resolve: async (_, args) => {
-      const existing = await Karaoke.findOne({ where: { userId: args.userId } });
-      if (existing) {
-        await existing.destroy();
-      }
       return Karaoke.create(args);
     },
   },
