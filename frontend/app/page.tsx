@@ -10,6 +10,8 @@ import SetMealtime from "./components/set-mealtime"
 import UpdateUser from "./components/update-user"
 import GetAllScansWithFilters from "./components/get-scans-filters"
 import GetUserById from "./components/get-user-by-id"
+import AddKaraoke from "./components/add-karaoke-video"
+import DisplayKaraoke from "./components/display-karaoke"
 
 const queryClient = new QueryClient()
 
@@ -24,7 +26,7 @@ export default function Page() {
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="users" className="w-full">
-              <TabsList className="grid w-full grid-cols-8">
+              <TabsList className="grid w-full grid-cols-10">
                 <TabsTrigger value="users">Users</TabsTrigger>
                 <TabsTrigger value="get-user-by-id">Get User By Id</TabsTrigger>
                 <TabsTrigger value="add-user">Add User</TabsTrigger>
@@ -33,6 +35,8 @@ export default function Page() {
                 <TabsTrigger value="add-scan">Add Scan</TabsTrigger>
                 <TabsTrigger value="meals">Meal Schedule</TabsTrigger>
                 <TabsTrigger value="set-mealtime">Set Mealtime</TabsTrigger>
+                <TabsTrigger value="add-karaoke-video">Add Karaoke</TabsTrigger>
+                <TabsTrigger value="display-karaoke">Display Karaoke</TabsTrigger>
               </TabsList>
               <TabsContent value="users">
                 <UsersView />
@@ -57,6 +61,12 @@ export default function Page() {
               </TabsContent>
               <TabsContent value="get-user-by-id">
                 <GetUserById />
+              </TabsContent>
+              <TabsContent value="add-karaoke-video">
+                <AddKaraoke />
+              </TabsContent>
+              <TabsContent value="display-karaoke">
+                <DisplayKaraoke />
               </TabsContent>
             </Tabs>
           </CardContent>
