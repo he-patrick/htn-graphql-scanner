@@ -1,6 +1,7 @@
 import { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLID } from "graphql";
 import User from "../models/User.js";
 import Scan from "../models/Scan.js";
+import Karaoke from "../models/Karaoke.js";
 
 const UserType = new GraphQLObjectType({
   name: "User",
@@ -42,6 +43,30 @@ const ScanType = new GraphQLObjectType({
   }),
 });
 
+const KaraokeType = new GraphQLObjectType({
+  name: "Karaoke",
+  fields: () => ({
+    karaokeId: { type: GraphQLID },
+    song_name: { type: GraphQLString },
+    artist: { type: GraphQLString },
+    youtube_link: { type: GraphQLString },
+    userId: { type: GraphQLID },
+    createdAt: { 
+      type: GraphQLString,
+      resolve: (karaoke) => karaoke.createdAt ? karaoke.createdAt.toISOString() : null,
+    },
+    updatedAt: { 
+      type: GraphQLString,
+      resolve: (karaoke) => karaoke.updatedAt ? karaoke.updatedAt.toISOString() : null,
+    },
+    user: {
+      type: UserType,
+      resolve: (karaoke) => User.findByPk(karaoke.userId),
+    },
+  }),
+});
+
+
 const MealtimeType = new GraphQLObjectType({
   name: "Mealtime",
   fields: () => ({
@@ -57,4 +82,4 @@ const MealtimeType = new GraphQLObjectType({
   })
 });
 
-export { UserType, ScanType, MealtimeType };
+export { UserType, ScanType, KaraokeType, MealtimeType };
