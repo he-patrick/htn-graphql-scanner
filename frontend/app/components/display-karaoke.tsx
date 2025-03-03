@@ -5,6 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { Card } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 const GET_KARAOKES_QUERY = `
   query GetKaraokes {
@@ -30,6 +33,11 @@ interface Karaoke {
 export default function DisplayKaraoke() {
   const [karaokeQueue, setKaraokeQueue] = useState<Karaoke[]>([]);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [debugInfo, setDebugInfo] = useState({
+    query: GET_KARAOKES_QUERY,
+    variables: {},
+    response: null,
+  });
 
   const { data, isLoading, error } = useQuery<Karaoke[], Error>({
     queryKey: ["karaokes"],
@@ -46,6 +54,12 @@ export default function DisplayKaraoke() {
       if (result.errors) {
         throw new Error(result.errors[0].message);
       }
+      // Store debug information
+      setDebugInfo({
+        query: GET_KARAOKES_QUERY,
+        variables: {},
+        response: result
+      });
       return result.data.karaokes as Karaoke[];
     },
   });
@@ -147,6 +161,44 @@ export default function DisplayKaraoke() {
           )}
         </div>
       </div>
+
+      {/* Debug Panel */}
+      <Card className="p-4">
+        <Accordion type="single" defaultValue="debug">
+          <AccordionItem value="debug">
+            <AccordionTrigger className="font-semibold">
+              GraphQL Debug Information
+            </AccordionTrigger>
+            <AccordionContent>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4">
+                  <h3 className="font-medium">GraphQL Query:</h3>
+                  <div className="space-y-2">
+                    <div className="rounded bg-neutral-100 p-4 dark:bg-neutral-900 overflow-auto max-h-[400px]">
+                      <pre className="text-sm font-mono whitespace-pre">{debugInfo.query}</pre>
+                    </div>
+                    
+                    {Object.keys(debugInfo.variables || {}).length > 0 && (
+                      <div>
+                        <h4 className="font-medium mt-2">Variables:</h4>
+                        <pre className="rounded bg-neutral-100 p-4 dark:bg-neutral-900 overflow-auto mt-1 text-sm font-mono">
+                          {JSON.stringify(debugInfo.variables, null, 2)}
+                        </pre>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-medium">API Response:</h3>
+                  <pre className="rounded bg-neutral-100 p-4 dark:bg-neutral-900 overflow-auto max-h-[400px] text-sm font-mono mt-4">
+                    {JSON.stringify(debugInfo.response, null, 2)}
+                  </pre>
+                </div>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </Card>
     </div>
   );
 }
