@@ -1,4 +1,4 @@
-# Hack the North 2025 Backend Challenge
+# A GraphQL Scanner for Hack the North
 
 ## Hosted Interactive Client
 Try out the queries and mutations hosted on AWS Lambda and RDS through this website: https://htn-backend-challenge.vercel.app
